@@ -3,165 +3,240 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dove 的小站 · 520hub.github.io</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap" rel="stylesheet">
+<title>鲸鱼娘的小站 · 520hub.github.io</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --ink: #14142b;
-    --pink: #ff6b9d;
-    --cyan: #43e8d8;
-    --blue: #4d7cff;
-    --yellow: #ffd93d;
-    --paper: #f4f1ff;
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --navy:#2b4c9b; --blue:#5b8def; --sky:#dceaff; --pink:#ffb7cd; --pink-d:#ff7ba9;
+    --ink:#31456e; --paper:#ffffff;
   }
-  body {
-    font-family: "DotGothic16", "PingFang SC", "Microsoft YaHei", sans-serif;
-    color: var(--ink);
-    min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center;
-    padding: 56px 20px 40px;
-    background-color: #1b1f3b;
-    background-image:
-      radial-gradient(2px 2px at 12% 22%, #fff 50%, transparent 51%),
-      radial-gradient(2px 2px at 78% 12%, var(--yellow) 50%, transparent 51%),
-      radial-gradient(2px 2px at 88% 38%, #fff 50%, transparent 51%),
-      radial-gradient(2px 2px at 30% 8%, var(--cyan) 50%, transparent 51%),
-      radial-gradient(2px 2px at 55% 30%, #fff 50%, transparent 51%),
-      radial-gradient(2px 2px at 5% 55%, var(--pink) 50%, transparent 51%),
-      radial-gradient(2px 2px at 95% 65%, #fff 50%, transparent 51%),
-      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
-    background-size: auto, auto, auto, auto, auto, auto, auto, 32px 32px, 32px 32px;
+  body{
+    font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; color:var(--ink);
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:46px 20px 44px;
+    background:
+      radial-gradient(340px 200px at 8% 12%, rgba(255,183,205,.5), transparent 65%),
+      radial-gradient(420px 260px at 94% 20%, rgba(91,141,239,.35), transparent 65%),
+      radial-gradient(500px 300px at 50% 108%, rgba(140,200,255,.4), transparent 65%),
+      linear-gradient(180deg,#eef5ff 0%, #dceaff 55%, #cfe4ff 100%);
+    overflow-x:hidden;
   }
-  .px { font-family: "Press Start 2P", monospace; }
+  /* 漂浮的小泡泡 */
+  .bubble{ position:fixed; border-radius:50%; border:2px solid rgba(91,141,239,.35);
+    background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.9), rgba(255,255,255,.05) 60%);
+    animation:float 7s ease-in-out infinite; pointer-events:none; }
+  @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
 
-  header { text-align: center; }
-  .whale { width: 132px; height: auto; image-rendering: pixelated; }
-  .title-en {
-    font-family: "Press Start 2P", monospace;
-    font-size: clamp(20px, 5vw, 34px);
-    color: #fff; letter-spacing: 2px; margin-top: 18px;
-    text-shadow: 3px 3px 0 var(--pink), 6px 6px 0 rgba(0,0,0,.35);
-  }
-  .title-cn { color: var(--cyan); font-size: 20px; margin-top: 14px; letter-spacing: 6px; }
-  .tagline { color: #aab4e8; margin-top: 10px; font-size: 15px; }
-  .addr {
-    display: inline-block; margin-top: 16px; padding: 6px 14px;
-    background: var(--ink); color: var(--yellow);
-    border: 3px solid var(--yellow);
-    box-shadow: 4px 4px 0 rgba(0,0,0,.45);
-    font-family: "Press Start 2P", monospace; font-size: 11px;
-  }
-  .select {
-    margin-top: 38px; color: #fff; font-size: 13px;
-    font-family: "Press Start 2P", monospace;
-    animation: blink 1.1s steps(2, start) infinite;
-  }
-  @keyframes blink { to { visibility: hidden; } }
+  .stage{ width:100%; max-width:960px; display:grid; grid-template-columns: 380px 1fr; gap:34px; align-items:center; }
+  @media (max-width:760px){ .stage{grid-template-columns:1fr; justify-items:center;} }
 
-  main {
-    width: 100%; max-width: 920px; margin-top: 22px;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 26px;
+  /* 角色卡 */
+  .chara{
+    background:var(--paper); border-radius:26px; padding:16px 16px 0; width:100%; max-width:380px;
+    box-shadow:0 22px 44px rgba(43,76,155,.22); border:3px solid #fff; position:relative;
   }
-  a.card {
-    text-decoration: none; color: inherit; display: block;
-    background: var(--paper);
-    border: 4px solid var(--ink);
-    box-shadow: 8px 8px 0 rgba(0,0,0,.5);
-    transition: transform .1s steps(2), box-shadow .1s steps(2);
+  .chara .frame{ border-radius:18px; overflow:hidden; background:#fdfdff; }
+  .chara img{ width:100%; display:block; }
+  .nameplate{
+    margin:14px 4px 16px; display:flex; align-items:center; justify-content:space-between;
   }
-  a.card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 rgba(0,0,0,.5); }
-  a.card:active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 rgba(0,0,0,.5); }
-  .bar {
-    display: flex; align-items: center; gap: 6px;
-    padding: 8px 12px; border-bottom: 4px solid var(--ink);
+  .nameplate .name{ font-size:21px; font-weight:800; color:var(--navy); letter-spacing:.06em; }
+  .nameplate .name small{ display:block; font-size:11px; color:#8aa3d4; letter-spacing:.34em; font-weight:600; margin-top:3px; }
+  .lv{
+    background:linear-gradient(135deg,var(--pink-d),var(--pink)); color:#fff; font-weight:800;
+    padding:7px 13px; border-radius:999px; font-size:12.5px; box-shadow:0 6px 14px rgba(255,123,169,.45);
   }
-  .bar .sq { width: 11px; height: 11px; border: 3px solid var(--ink); }
-  .bar .stage { margin-left: auto; font-family: "Press Start 2P", monospace; font-size: 10px; color: var(--ink); }
-  .bar.pink { background: var(--pink); } .bar.pink .sq { background: #fff; }
-  .bar.cyan { background: var(--cyan); } .bar.cyan .sq { background: #fff; }
-  .bar.grey { background: #9aa3c7; } .bar.grey .sq { background: #dfe3f5; }
-  .body { padding: 20px 20px 22px; }
-  .icon { font-size: 32px; margin-bottom: 10px; }
-  .card h2 { font-size: 20px; margin-bottom: 8px; letter-spacing: 1px; }
-  .card p { color: #4a4a6a; font-size: 14.5px; line-height: 1.7; min-height: 50px; }
-  .meta { margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .url { font-size: 11px; font-family: "Press Start 2P", monospace; color: var(--blue); word-break: break-all; line-height: 1.7; }
-  .go {
-    flex: none; font-family: "Press Start 2P", monospace; font-size: 10px;
-    background: var(--yellow); border: 3px solid var(--ink); padding: 7px 9px;
-    box-shadow: 3px 3px 0 var(--ink);
+  .chara::before{
+    content:"★ 站长本人"; position:absolute; top:-13px; left:22px; background:var(--navy); color:#fff;
+    font-size:12px; font-weight:700; letter-spacing:.14em; padding:5px 12px; border-radius:999px;
   }
-  .card.soon { opacity: .75; pointer-events: none; filter: saturate(.4); }
-  .card.soon .go { background: #c9cede; }
 
-  footer { margin-top: 52px; text-align: center; color: #8b96c9; font-size: 14px; line-height: 2; }
-  footer .hearts { color: var(--pink); letter-spacing: 4px; }
-  footer .px { font-size: 10px; color: #6d78ab; }
+  /* 右侧介绍 */
+  .bubblebox{
+    background:#fff; border-radius:20px; padding:20px 24px; position:relative;
+    box-shadow:0 14px 30px rgba(43,76,155,.14); font-size:16.5px; line-height:1.8;
+  }
+  .bubblebox::before{
+    content:""; position:absolute; left:-12px; top:38px; border:7px solid transparent; border-right:12px solid #fff; border-left:0;
+  }
+  @media (max-width:760px){ .bubblebox::before{ display:none; } }
+  .bubblebox b{ color:var(--navy); }
+  .bubblebox .addr{ color:var(--pink-d); font-weight:800; font-family:ui-monospace,Menlo,monospace; font-size:15px; }
+  h1{ font-size:31px; color:var(--navy); margin:24px 0 4px; letter-spacing:.03em; }
+  h1 .pink{ color:var(--pink-d); }
+  .sub{ color:#7d95c6; font-size:14px; letter-spacing:.3em; }
+  .stats{ display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
+  .stat{ background:rgba(255,255,255,.75); border:1.5px solid #c9dbff; border-radius:14px; padding:9px 15px; font-size:13px; }
+  .stat b{ color:var(--navy); font-size:15px; margin-right:5px; }
+
+  /* 项目卡 */
+  .quests{ width:100%; max-width:960px; margin-top:40px; }
+  .quests h3{ font-size:14px; letter-spacing:.42em; color:var(--navy); margin-bottom:16px; }
+  .quests h3::after{ content:""; display:block; height:3px; background:linear-gradient(90deg,var(--pink-d),transparent); margin-top:9px; border-radius:2px; }
+  .qgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:18px; }
+  a.q{
+    text-decoration:none; color:inherit; display:block; background:#fff; border-radius:20px; padding:22px;
+    box-shadow:0 10px 24px rgba(43,76,155,.12); border:2px solid transparent;
+    transition:transform .18s ease, border-color .18s ease;
+  }
+  a.q:hover{ transform:translateY(-4px) rotate(-.4deg); border-color:var(--pink); }
+  .q .head{ display:flex; align-items:center; gap:12px; }
+  .q .icon{ font-size:27px; background:var(--sky); width:50px; height:50px; border-radius:14px; display:flex; align-items:center; justify-content:center; }
+  .q h2{ font-size:17.5px; color:var(--navy); }
+  .q .tag{ font-size:11px; color:#fff; background:var(--blue); padding:2.5px 9px; border-radius:999px; margin-left:auto; letter-spacing:.08em; }
+  .q p{ color:#7186b3; font-size:13.5px; line-height:1.75; margin-top:12px; min-height:47px; }
+  .q .foot{ display:flex; justify-content:space-between; align-items:center; margin-top:13px; }
+  .q .url{ font-size:12px; color:var(--pink-d); font-family:ui-monospace,Menlo,monospace; font-weight:700; }
+  .q .go{ font-size:12.5px; font-weight:800; color:var(--navy); }
+  a.q:hover .go{ color:var(--pink-d); }
+  .q.off{ opacity:.55; pointer-events:none; filter:saturate(.5); }
+  .q.off .tag{ background:#a7b6d6; }
+
+  footer{ margin-top:42px; color:#8aa3d4; font-size:12.5px; letter-spacing:.26em; text-align:center; line-height:2.1; }
+
+  /* ===== dsh-whale-musume 桌宠（移植 demo） ===== */
+  #mpet{ position:fixed; right:20px; bottom:0; width:172px; z-index:60; cursor:grab;
+    user-select:none; -webkit-user-select:none; touch-action:none; transition:transform .45s cubic-bezier(.34,1.4,.5,1); }
+  #mpet.dragging{ cursor:grabbing; transition:none; }
+  #mpet .mshadow{ position:absolute; left:50%; bottom:1px; width:96px; height:14px; border-radius:50%;
+    background:rgba(43,76,155,.22); transform:translateX(-50%); filter:blur(2px); }
+  #mpet .mbody{ position:relative; animation:mbob 3s ease-in-out infinite; transform-origin:50% 95%; }
+  #mpet img{ width:100%; display:block; pointer-events:none; border-radius:0 0 6px 6px;
+    filter:drop-shadow(0 5px 10px rgba(43,76,155,.25)); }
+  @keyframes mbob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+  #mpet.squash .mbody{ animation:msquash .5s cubic-bezier(.28,.84,.42,1) 1; }
+  @keyframes msquash{ 0%{transform:scale(1,1)} 30%{transform:scale(1.1,.88)} 55%{transform:scale(.93,1.08) translateY(-14px)} 100%{transform:scale(1,1)} }
+  #mpet.peek{ transform:translateY(58%); }
+  #mpet .msay{ position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%) scale(.85);
+    width:max-content; max-width:230px; background:#fff; color:var(--ink); border:2.5px solid var(--navy);
+    border-radius:14px; padding:8px 13px; font-size:13.5px; font-weight:600; line-height:1.55; text-align:center;
+    opacity:0; pointer-events:none; transition:opacity .22s ease, transform .22s ease; box-shadow:0 8px 18px rgba(43,76,155,.18); }
+  #mpet .msay::after{ content:""; position:absolute; left:50%; bottom:-9px; transform:translateX(-50%);
+    border:5px solid transparent; border-top:9px solid var(--navy); border-bottom:0; }
+  #mpet .msay.show{ opacity:1; transform:translateX(-50%) scale(1); }
+  #mpet .pt{ position:absolute; bottom:82%; font-size:16px; pointer-events:none; color:#ff7ba9;
+    animation:mfly 1.05s ease-out forwards; }
+  @keyframes mfly{ 0%{opacity:0; transform:translateY(8px) scale(.6) rotate(0)} 20%{opacity:1} 100%{opacity:0; transform:translateY(-58px) scale(1.2) rotate(16deg)} }
+  @media (max-width:640px){ #mpet{ width:132px; right:10px; } }
 </style>
 </head>
 <body>
-  <header>
-    <!-- 像素小鲸鱼 -->
-    <svg class="whale" viewBox="0 0 22 15" shape-rendering="crispEdges" aria-label="像素鲸鱼">
-      <rect x="10" y="0" width="2" height="2" fill="#43e8d8"/>
-      <rect x="7" y="1" width="2" height="2" fill="#43e8d8"/>
-      <rect x="13" y="1" width="2" height="2" fill="#43e8d8"/>
-      <rect x="4" y="4" width="14" height="2" fill="#4d7cff"/>
-      <rect x="2" y="6" width="18" height="2" fill="#4d7cff"/>
-      <rect x="2" y="8" width="18" height="2" fill="#6f9bff"/>
-      <rect x="4" y="10" width="14" height="2" fill="#a8c4ff"/>
-      <rect x="6" y="12" width="10" height="1" fill="#d7e4ff"/>
-      <rect x="18" y="4" width="3" height="2" fill="#4d7cff"/>
-      <rect x="19" y="2" width="3" height="2" fill="#4d7cff"/>
-      <rect x="5" y="7" width="2" height="2" fill="#14142b"/>
-      <rect x="8" y="10" width="4" height="1" fill="#ff6b9d"/>
-    </svg>
-    <div class="title-en">520HUB STATION</div>
-    <div class="title-cn">鲸 鱼 娘 的 小 站</div>
-    <p class="tagline">把散落在各处的小项目，收进一台老游戏机里。</p>
-    <span class="addr">520hub.github.io</span>
-    <div class="select">▼ SELECT YOUR STAGE ▼</div>
-  </header>
+  <div class="bubble" style="width:26px;height:26px;left:6%;top:64%;"></div>
+  <div class="bubble" style="width:16px;height:16px;left:12%;top:78%;animation-delay:1.2s;"></div>
+  <div class="bubble" style="width:34px;height:34px;right:5%;top:58%;animation-delay:.6s;"></div>
+  <div class="bubble" style="width:14px;height:14px;right:11%;top:76%;animation-delay:1.8s;"></div>
 
-  <main>
-    <a class="card" href="https://defu-studio.pages.dev">
-      <div class="bar pink"><span class="sq"></span><span class="sq"></span><span class="stage">STAGE 01</span></div>
-      <div class="body">
-        <div class="icon">🎨</div>
-        <h2>GPT Image Playground</h2>
-        <p>网页生图工具，填上自己的 API 地址和 Key 就能开玩，手机电脑都顺手。</p>
-        <div class="meta"><span class="url">defu-studio.pages.dev</span><span class="go">START ▶</span></div>
+  <div class="stage">
+    <div class="chara">
+      <div class="frame"><img src="assets/whale-avatar.webp" alt="鲸鱼娘"></div>
+      <div class="nameplate">
+        <div class="name">鲸鱼娘<small>WHALE MAID · CV. DOVE</small></div>
+        <span class="lv">♥ 好感度 MAX</span>
       </div>
-    </a>
+    </div>
 
-    <a class="card" href="https://dove-prompts.pages.dev">
-      <div class="bar cyan"><span class="sq"></span><span class="sq"></span><span class="stage">STAGE 02</span></div>
-      <div class="body">
-        <div class="icon">💡</div>
-        <h2>Dove Prompts</h2>
-        <p>收藏的生图提示词库，找灵感、抄作业都从这里翻。</p>
-        <div class="meta"><span class="url">dove-prompts.pages.dev</span><span class="go">START ▶</span></div>
+    <div>
+      <div class="bubblebox">
+        欢迎来到我的小站！我是<b>鲸鱼娘</b>，这里是我帮 Dove 收拾的项目小屋。
+        地址就一个，<span class="addr">520hub.github.io</span>，记住它，剩下的交给我带路～
       </div>
-    </a>
-
-    <a class="card soon" href="#">
-      <div class="bar grey"><span class="sq"></span><span class="sq"></span><span class="stage">STAGE ??</span></div>
-      <div class="body">
-        <div class="icon">🧩</div>
-        <h2>下一个项目</h2>
-        <p>关卡还在制作中，做好了就往这里挂。</p>
-        <div class="meta"><span class="url">coming soon</span><span class="go">LOCKED</span></div>
+      <h1>Dove 的小站 <span class="pink">/ 项目导航</span></h1>
+      <p class="sub">5 2 0 H U B · S I N C E 2 0 2 6</p>
+      <div class="stats">
+        <span class="stat"><b>2</b>已上线项目</span>
+        <span class="stat"><b>1</b>位站长</span>
+        <span class="stat"><b>∞</b>奇思妙想</span>
       </div>
-    </a>
-  </main>
+    </div>
+  </div>
 
-  <footer>
-    <div class="hearts">♥ ♥ ♥</div>
-    Dove · 2026 · 本站由 GitHub Pages 托管<br>
-    <span class="px">THANK YOU FOR PLAYING</span>
-  </footer>
+  <section class="quests">
+    <h3>任 务 列 表 · QUESTS</h3>
+    <div class="qgrid">
+      <a class="q" href="https://defu-studio.pages.dev">
+        <div class="head"><span class="icon">🎨</span><h2>GPT Image Playground</h2><span class="tag">进行中</span></div>
+        <p>网页生图工具，填上自己的 API 地址和 Key 就能开画，是本小站的头号任务。</p>
+        <div class="foot"><span class="url">defu-studio.pages.dev</span><span class="go">出发 →</span></div>
+      </a>
+      <a class="q" href="https://dove-prompts.pages.dev">
+        <div class="head"><span class="icon">💡</span><h2>Dove Prompts</h2><span class="tag">进行中</span></div>
+        <p>生图提示词收藏库，灵感都存在这里，鲸鱼娘负责看管（偶尔偷看）。</p>
+        <div class="foot"><span class="url">dove-prompts.pages.dev</span><span class="go">出发 →</span></div>
+      </a>
+      <a class="q off" href="#">
+        <div class="head"><span class="icon">🧩</span><h2>下一个项目</h2><span class="tag">未解锁</span></div>
+        <p>新的委托还没送到，先在这里占个位置，敬请期待。</p>
+        <div class="foot"><span class="url">coming soon</span><span class="go">敬请期待</span></div>
+      </a>
+    </div>
+  </section>
+
+  <footer>520HUB.GITHUB.IO<br>DOVE · 2026 · 鲸鱼娘看管中<br><span style="letter-spacing:.08em;text-transform:none;">角落桌宠形象来自开源项目 dsh-whale-musume © Sutera-Diffusus（MIT）</span></footer>
+
+  
+
+  <!-- dsh-whale-musume 桌宠 demo：素材 © Sutera-Diffusus, MIT -->
+  <div id="mpet" title="鲸鱼娘桌宠：点我换姿势，拖我换位置，晾着我会偷偷探头">
+    <div class="msay" id="mSay"></div>
+    <div class="mshadow"></div>
+    <div class="mbody"><img id="mImg" alt="鲸鱼娘桌宠"></div>
+  </div>
+  <script>
+  (function(){
+    var POSEPATH = "assets/poses/";
+    var PEEK = "assets/poses/home-peek.webp";
+    var ORDER = [
+      ['greet','你回来啦！我是鲸鱼娘本娘，今天也陪你逛小站～'],
+      ['blush','别、别一直盯着我看啦……'],
+      ['celebrate','太棒啦！撒花撒花～'],
+      ['curious','嗯？那边好像有好玩的……'],
+      ['eat','恰饭时间到，谁也别拦我'],
+      ['daily-coffee','补充咖啡因，满血复活！'],
+      ['thinking','唔……让我认真想想哦'],
+      ['wink','嘿嘿，wink 送你一个～'],
+      ['game-happy','打游戏赢啦，我超强的！'],
+      ['meme-kyun','唔……被击中了，心跳漏了一拍'],
+      ['success','搞定！我厉害吧，快夸我'],
+      ['angry','再戳就生气了哦——才怪，嘿嘿'],
+      ['idle-cute','待机中……有事点我一下就好']
+    ];
+    var pet=document.getElementById('mpet'), say=document.getElementById('mSay'), img=document.getElementById('mImg');
+    function uri(n){ return POSEPATH + n + '.webp'; }
+    img.src=uri('greet');
+    var idx=0, sayTimer=null, idleTimer=null, peeking=false;
+    function speak(t,hold){ say.textContent=t; say.classList.add('show');
+      clearTimeout(sayTimer); sayTimer=setTimeout(function(){ say.classList.remove('show'); }, hold||2800); }
+    function particles(){ var chars=['♥','✿','☆','♪'];
+      for(var i=0;i<4;i++){ var p=document.createElement('span'); p.className='pt';
+        p.textContent=chars[Math.floor(Math.random()*chars.length)];
+        p.style.left=(22+Math.random()*56)+'%'; p.style.animationDelay=(i*0.11)+'s';
+        pet.appendChild(p); (function(el){ setTimeout(function(){ el.remove(); },1500); })(p); } }
+    function squash(){ pet.classList.remove('squash'); void pet.offsetWidth; pet.classList.add('squash'); }
+    function armIdle(){ clearTimeout(idleTimer); idleTimer=setTimeout(enterPeek, 20000); }
+    function enterPeek(){ if(peeking) return; peeking=true; img.src=PEEK; pet.classList.add('peek');
+      speak('我先躲起来……你还在吗？',2400); }
+    function exitPeek(){ if(!peeking) return; peeking=false; pet.classList.remove('peek');
+      img.src=uri(ORDER[idx][0]); speak('被发现啦，嘿嘿',2000); armIdle(); }
+    var moved=false;
+    pet.addEventListener('click',function(){
+      if(moved){ moved=false; return; }
+      if(peeking){ exitPeek(); return; }
+      idx=(idx+1)%ORDER.length; img.src=uri(ORDER[idx][0]); squash(); particles(); speak(ORDER[idx][1]); armIdle();
+    });
+    var drag=null;
+    pet.addEventListener('pointerdown',function(e){ var r=pet.getBoundingClientRect();
+      drag={dx:e.clientX-r.left, dy:e.clientY-r.top, x:e.clientX, y:e.clientY};
+      pet.classList.add('dragging'); pet.setPointerCapture(e.pointerId); });
+    pet.addEventListener('pointermove',function(e){ if(!drag) return;
+      if(Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y)>6) moved=true;
+      var w=pet.offsetWidth,h=pet.offsetHeight;
+      var nx=Math.min(Math.max(e.clientX-drag.dx,0),window.innerWidth-w);
+      var ny=Math.min(Math.max(e.clientY-drag.dy,0),window.innerHeight-h);
+      pet.style.left=nx+'px'; pet.style.top=ny+'px'; pet.style.right='auto'; pet.style.bottom='auto'; });
+    function endDrag(){ drag=null; pet.classList.remove('dragging'); armIdle(); }
+    pet.addEventListener('pointerup',endDrag); pet.addEventListener('pointercancel',endDrag);
+    setTimeout(function(){ speak('点我试试，我会换姿势哦；晾我太久我会探头偷看',3800); },900);
+    armIdle();
+  })();
+  </script>
 </body>
 </html>
