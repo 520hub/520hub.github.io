@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dove 的小站 · 520hub.github.io</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #14142b;
+    --pink: #ff6b9d;
+    --cyan: #43e8d8;
+    --blue: #4d7cff;
+    --yellow: #ffd93d;
+    --paper: #f4f1ff;
+  }
+  body {
+    font-family: "DotGothic16", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 56px 20px 40px;
+    background-color: #1b1f3b;
+    background-image:
+      radial-gradient(2px 2px at 12% 22%, #fff 50%, transparent 51%),
+      radial-gradient(2px 2px at 78% 12%, var(--yellow) 50%, transparent 51%),
+      radial-gradient(2px 2px at 88% 38%, #fff 50%, transparent 51%),
+      radial-gradient(2px 2px at 30% 8%, var(--cyan) 50%, transparent 51%),
+      radial-gradient(2px 2px at 55% 30%, #fff 50%, transparent 51%),
+      radial-gradient(2px 2px at 5% 55%, var(--pink) 50%, transparent 51%),
+      radial-gradient(2px 2px at 95% 65%, #fff 50%, transparent 51%),
+      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: auto, auto, auto, auto, auto, auto, auto, 32px 32px, 32px 32px;
+  }
+  .px { font-family: "Press Start 2P", monospace; }
+
+  header { text-align: center; }
+  .whale { width: 132px; height: auto; image-rendering: pixelated; }
+  .title-en {
+    font-family: "Press Start 2P", monospace;
+    font-size: clamp(20px, 5vw, 34px);
+    color: #fff; letter-spacing: 2px; margin-top: 18px;
+    text-shadow: 3px 3px 0 var(--pink), 6px 6px 0 rgba(0,0,0,.35);
+  }
+  .title-cn { color: var(--cyan); font-size: 20px; margin-top: 14px; letter-spacing: 6px; }
+  .tagline { color: #aab4e8; margin-top: 10px; font-size: 15px; }
+  .addr {
+    display: inline-block; margin-top: 16px; padding: 6px 14px;
+    background: var(--ink); color: var(--yellow);
+    border: 3px solid var(--yellow);
+    box-shadow: 4px 4px 0 rgba(0,0,0,.45);
+    font-family: "Press Start 2P", monospace; font-size: 11px;
+  }
+  .select {
+    margin-top: 38px; color: #fff; font-size: 13px;
+    font-family: "Press Start 2P", monospace;
+    animation: blink 1.1s steps(2, start) infinite;
+  }
+  @keyframes blink { to { visibility: hidden; } }
+
+  main {
+    width: 100%; max-width: 920px; margin-top: 22px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 26px;
+  }
+  a.card {
+    text-decoration: none; color: inherit; display: block;
+    background: var(--paper);
+    border: 4px solid var(--ink);
+    box-shadow: 8px 8px 0 rgba(0,0,0,.5);
+    transition: transform .1s steps(2), box-shadow .1s steps(2);
+  }
+  a.card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 rgba(0,0,0,.5); }
+  a.card:active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 rgba(0,0,0,.5); }
+  .bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 12px; border-bottom: 4px solid var(--ink);
+  }
+  .bar .sq { width: 11px; height: 11px; border: 3px solid var(--ink); }
+  .bar .stage { margin-left: auto; font-family: "Press Start 2P", monospace; font-size: 10px; color: var(--ink); }
+  .bar.pink { background: var(--pink); } .bar.pink .sq { background: #fff; }
+  .bar.cyan { background: var(--cyan); } .bar.cyan .sq { background: #fff; }
+  .bar.grey { background: #9aa3c7; } .bar.grey .sq { background: #dfe3f5; }
+  .body { padding: 20px 20px 22px; }
+  .icon { font-size: 32px; margin-bottom: 10px; }
+  .card h2 { font-size: 20px; margin-bottom: 8px; letter-spacing: 1px; }
+  .card p { color: #4a4a6a; font-size: 14.5px; line-height: 1.7; min-height: 50px; }
+  .meta { margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .url { font-size: 11px; font-family: "Press Start 2P", monospace; color: var(--blue); word-break: break-all; line-height: 1.7; }
+  .go {
+    flex: none; font-family: "Press Start 2P", monospace; font-size: 10px;
+    background: var(--yellow); border: 3px solid var(--ink); padding: 7px 9px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .card.soon { opacity: .75; pointer-events: none; filter: saturate(.4); }
+  .card.soon .go { background: #c9cede; }
+
+  footer { margin-top: 52px; text-align: center; color: #8b96c9; font-size: 14px; line-height: 2; }
+  footer .hearts { color: var(--pink); letter-spacing: 4px; }
+  footer .px { font-size: 10px; color: #6d78ab; }
+</style>
+</head>
+<body>
+  <header>
+    <!-- 像素小鲸鱼 -->
+    <svg class="whale" viewBox="0 0 22 15" shape-rendering="crispEdges" aria-label="像素鲸鱼">
+      <rect x="10" y="0" width="2" height="2" fill="#43e8d8"/>
+      <rect x="7" y="1" width="2" height="2" fill="#43e8d8"/>
+      <rect x="13" y="1" width="2" height="2" fill="#43e8d8"/>
+      <rect x="4" y="4" width="14" height="2" fill="#4d7cff"/>
+      <rect x="2" y="6" width="18" height="2" fill="#4d7cff"/>
+      <rect x="2" y="8" width="18" height="2" fill="#6f9bff"/>
+      <rect x="4" y="10" width="14" height="2" fill="#a8c4ff"/>
+      <rect x="6" y="12" width="10" height="1" fill="#d7e4ff"/>
+      <rect x="18" y="4" width="3" height="2" fill="#4d7cff"/>
+      <rect x="19" y="2" width="3" height="2" fill="#4d7cff"/>
+      <rect x="5" y="7" width="2" height="2" fill="#14142b"/>
+      <rect x="8" y="10" width="4" height="1" fill="#ff6b9d"/>
+    </svg>
+    <div class="title-en">520HUB STATION</div>
+    <div class="title-cn">鲸 鱼 娘 的 小 站</div>
+    <p class="tagline">把散落在各处的小项目，收进一台老游戏机里。</p>
+    <span class="addr">520hub.github.io</span>
+    <div class="select">▼ SELECT YOUR STAGE ▼</div>
+  </header>
+
+  <main>
+    <a class="card" href="https://defu-studio.pages.dev">
+      <div class="bar pink"><span class="sq"></span><span class="sq"></span><span class="stage">STAGE 01</span></div>
+      <div class="body">
+        <div class="icon">🎨</div>
+        <h2>GPT Image Playground</h2>
+        <p>网页生图工具，填上自己的 API 地址和 Key 就能开玩，手机电脑都顺手。</p>
+        <div class="meta"><span class="url">defu-studio.pages.dev</span><span class="go">START ▶</span></div>
+      </div>
+    </a>
+
+    <a class="card" href="https://dove-prompts.pages.dev">
+      <div class="bar cyan"><span class="sq"></span><span class="sq"></span><span class="stage">STAGE 02</span></div>
+      <div class="body">
+        <div class="icon">💡</div>
+        <h2>Dove Prompts</h2>
+        <p>收藏的生图提示词库，找灵感、抄作业都从这里翻。</p>
+        <div class="meta"><span class="url">dove-prompts.pages.dev</span><span class="go">START ▶</span></div>
+      </div>
+    </a>
+
+    <a class="card soon" href="#">
+      <div class="bar grey"><span class="sq"></span><span class="sq"></span><span class="stage">STAGE ??</span></div>
+      <div class="body">
+        <div class="icon">🧩</div>
+        <h2>下一个项目</h2>
+        <p>关卡还在制作中，做好了就往这里挂。</p>
+        <div class="meta"><span class="url">coming soon</span><span class="go">LOCKED</span></div>
+      </div>
+    </a>
+  </main>
+
+  <footer>
+    <div class="hearts">♥ ♥ ♥</div>
+    Dove · 2026 · 本站由 GitHub Pages 托管<br>
+    <span class="px">THANK YOU FOR PLAYING</span>
+  </footer>
+</body>
+</html>
