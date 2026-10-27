@@ -199,9 +199,25 @@
       ['angry','再戳就生气了哦——才怪，嘿嘿'],
       ['idle-cute','待机中……有事点我一下就好']
     ];
+    
+    /* 按时段自动换姿势（访客本地时间） */
+    var SCHEDULE = [
+      { h:[5,8],   pose:'daily-stretch', line:'早上好……哈欠，先伸个懒腰再开工' },
+      { h:[8,11],  pose:'daily-coffee',  line:'上午时光，咖啡续命，精神满格' },
+      { h:[11,14], pose:'eat',           line:'干饭时间！吃饱了才有力气干活' },
+      { h:[14,18], pose:'work-review',   line:'下午继续营业，认真工作中……' },
+      { h:[18,20], pose:'daily-cooking', line:'晚饭时间，我来露一手～' },
+      { h:[20,22], pose:'daily-gaming',  line:'下班啦！游戏时间到，谁也别拦我' },
+      { h:[22,24], pose:'daily-pajama',  line:'洗完澡啦，睡衣模式，准备睡觉觉' },
+      { h:[0,5],   pose:'sleep',         line:'嘘……她睡着了，我们小声一点' }
+    ];
+    function segNow(){ var hh=new Date().getHours();
+      for (var i=0;i<SCHEDULE.length;i++){ if (hh>=SCHEDULE[i].h[0] && hh<SCHEDULE[i].h[1]) return SCHEDULE[i]; }
+      return SCHEDULE[0]; }
+    var currentPose='greet', lastManual=0, curSeg=null;
     var pet=document.getElementById('mpet'), say=document.getElementById('mSay'), img=document.getElementById('mImg');
     function uri(n){ return POSEPATH + n + '.webp'; }
-    img.src=uri('greet');
+    curSeg=segNow(); currentPose=curSeg.pose; img.src=uri(currentPose);
     var idx=0, sayTimer=null, idleTimer=null, peeking=false;
     function speak(t,hold){ say.textContent=t; say.classList.add('show');
       clearTimeout(sayTimer); sayTimer=setTimeout(function(){ say.classList.remove('show'); }, hold||2800); }
@@ -215,12 +231,12 @@
     function enterPeek(){ if(peeking) return; peeking=true; img.src=PEEK; pet.classList.add('peek');
       speak('我先躲起来……你还在吗？',2400); }
     function exitPeek(){ if(!peeking) return; peeking=false; pet.classList.remove('peek');
-      img.src=uri(ORDER[idx][0]); speak('被发现啦，嘿嘿',2000); armIdle(); }
+      img.src=uri(currentPose); speak('被发现啦，嘿嘿',2000); armIdle(); }
     var moved=false;
     pet.addEventListener('click',function(){
       if(moved){ moved=false; return; }
       if(peeking){ exitPeek(); return; }
-      idx=(idx+1)%ORDER.length; img.src=uri(ORDER[idx][0]); squash(); particles(); speak(ORDER[idx][1]); armIdle();
+      idx=(idx+1)%ORDER.length; currentPose=ORDER[idx][0]; lastManual=Date.now(); img.src=uri(currentPose); squash(); particles(); speak(ORDER[idx][1]); armIdle();
     });
     var drag=null;
     pet.addEventListener('pointerdown',function(e){ var r=pet.getBoundingClientRect();
@@ -234,7 +250,16 @@
       pet.style.left=nx+'px'; pet.style.top=ny+'px'; pet.style.right='auto'; pet.style.bottom='auto'; });
     function endDrag(){ drag=null; pet.classList.remove('dragging'); armIdle(); }
     pet.addEventListener('pointerup',endDrag); pet.addEventListener('pointercancel',endDrag);
-    setTimeout(function(){ speak('点我试试，我会换姿势哦；晾我太久我会探头偷看',3800); },900);
+
+    setInterval(function(){
+      var seg=segNow();
+      if (seg!==curSeg){ curSeg=seg;
+        if (!peeking && Date.now()-lastManual>180000){
+          currentPose=seg.pose; img.src=uri(currentPose); squash(); speak(seg.line,3200);
+        } else { currentPose=seg.pose; if(!peeking) img.src=uri(currentPose); }
+      }
+    }, 30000);
+    setTimeout(function(){ speak(curSeg.line+'（点我也能换姿势哦）',3800); },900);
     armIdle();
   })();
   </script>
